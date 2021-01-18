@@ -3,60 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiple Choice Quiz</title>
-    <link rel="stylesheet" href="./assets/style.css">
+    <title>Code Quiz</title>
+    <link rel="stylesheet" type="text/css" href="./assets/style.css" />
 </head>
-
 <body>
-    <main>
-        <div class= "the-grid">
-            <div id="Dquiz">
-                <h1></h1>
+    <div>
+        <h1><button onclick="needHighScores()">View High Scores</button></h1>
+        <div id="showhigh-scores"></div>
+        <div class="container">
+            <button id="start" class="btn"> Start Quiz</button>
+            <h2 id="countdown"></h2>
+            <div id="main">
+              <div id="question-span">Begin Quiz Here!!</div>
+              <div id="Game-End">
+                
+                
+                <form method="post" name="highscore-form" id ="string-initials">
+  
+                  Enter Your Initials Here <input type="text" name="high-score-initials">
+                  <button class="btn" id="save-task" type="submit" onclick="setHighScores()">Submit High Score</button>
 
-                <div class="wrapped" id="wrapped">
-                    <div class="container">
-                        <div id="theprogress"></div>
-                        <div id="time-remaining"></div>
-                    </div>
-                </div>
+                </form>
 
-                <hr style="margin-bottom: 25px">
-                <!--Start Buttom made here-->
-                <div>
-                    <button id="start-button">START QUIZ</button>
-                </div>
 
-                <p id="questions"></p>
-
-                <div class="answers">
-                    <button id="buttonZ">
-                        <span id="choiceA"></span>
-                    </button>
-
-                    <button id="buttonY">
-                        <span id="choiceB"></span>
-                    </button>
-
-                    <button id="buttonX">
-                        <span id="choiceC"></span>
-                    </button>
-
-                    <button id="buttonW">
-                        <span id="choiceD"></span>
-                    </button>
-                </div>
-
-                <hr style="margin-bottom: 45px">
-
-                <footer>
-                    <p id="status-answers"></p>
-                </footer>
-
-                <hr style="margin-top: 45px">
+              </div>
+              <div class="Contains-Questions">
+                
+              </div>
+             
             </div>
+            <div id="answerZ"></div>
+            
+            </div>
+            
+
         </div>
-    </main>
+    </div>
     
-    <script src="quiz.js"></script>    
+  <script src="./quiz.js"></script>  
+  <footer>
+    &copy;By Evan Teems
+  </footer>
 </body>
 </html>

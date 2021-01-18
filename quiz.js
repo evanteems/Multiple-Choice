@@ -1,163 +1,190 @@
-// all id elements go here!!
-let timeRemaining = 250;
-let startQuizBtn = document.getElementById( "start-button" );
+let countDownEl = document.querySelector("#countdown");
+let questionContainerEl = document.querySelector(".Contains-Questions");
+let questionSpanEl = document.querySelector("#question-span");
+let scoreEl = document.querySelector("#count");
+let startEl = document.querySelector("#start");
 
-// Function Contructer starts here!!
-let TheQuiz = function( questionsObj ) {
-   this.correctAnswer = 0;
-   this.questions = questionsObj;
-   this.questionIndex = 0;
-};
+//This will display if the answers are correct or wrong!!
+let answerArea = document.querySelector("#answerZ");
 
-TheQuiz.prototype.getQuestionIndex = function() {
-   return this.questions[ this.questionIndex ];
-};
+let endGameArea = document.querySelector("#Game-End");
 
-// When the user chooses an answer
-TheQuiz.prototype.userChoice = function( userAnswer ) {
-   let isCorrect = document.getElementById( "status-answers" );
+let score = 0;
+let timeLeft = 60;
+let currentQuestionindex = 0;
 
-   // When the user chooses an answer Correctly!!
-   if ( this.getQuestionIndex().isCorrectAnswer( userAnswer )) {
-      this.correctAnswer++;
-      isCorrect.innerHTML = "This answer is Correct!";
-   }
-   // When the user chooses an answer incorrectly!!
-   else {
-      isCorrect.innerHTML = "This answer is wrong!!";
-      timeRemaining = timeRemaining - 10;
-      console.log ( "timeRemaining: " + timeRemaining );
-      displayTime();
-   };
+//Questions will be made here!!!
+let questions = [
+    { q: "HTML (Hypertext Markup Language)  is the code that is used to structure?", a: "web page content", b: "css", c: "javascript", d: "terminal"},
+    { q: "Which one is not a CSS property?", a: "color", b: "font-style", c: "text-align", d: "pizza" },
+    { q: "Which language makes the web page interactive?", a: "html", b: "css", c: "javascript", d: "google"  },
+    { q: "Which one is not a data type?", a: "inter", b: "string", c:"boolean", d: "color" },
+    { q: "Does coding rock?", a: "true", b: "false" }
+    
+]
 
-   this.questionIndex++;
-};
+// run timer function
+function countDown(amount) {
+    // check if time left is greater that 0
+    // if it is, decrement timeLeft
+    // and update countDownEl with new time
 
-TheQuiz.prototype.isEnded = function() {
-   return this.questionIndex === this.questions.length;
-};
 
-let eachQuestion = function( question, answerChoices, correctAnswer ) {
-   this.questionText = question;
-   this.answerChoices = answerChoices;
-   this.correctAnswer = correctAnswer;
-};
+    //TAKE THE ARGUMENT PASSED IN AND DECREMENT BY THAT MUCH
+    if ( amount > 1 ) {
+        timeLeft =  timeLeft - amount;
+    } else {
+        timeLeft--;
+    }
+    
+    countDownEl.textContent = timeLeft
+}
 
-eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
-   return this.correctAnswer === userAnswer;
-};
+function endGame(score, initials = "", status) {
 
-// Display the current remaining time
-let displayTime = function() {
-   let timeElement = document.getElementById( "time-left" );
-   console.log( "displayTime function timeElement: " );
-   console.log( timeElement );
-   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
-};
+    if(status === "end game") {
 
-let displayQuiz = function() {
-   // Hide the "Start Quiz" button from the welcome page
-   startQuizBtn.style.visibility = "hidden";
+        questionContainerEl.textContent = "Your time is up, but at least you were able to score " + score; 
+        endGameArea.style.display = "block";
+        questionSpanEl.textContent = "";
+        questionContainerEl.textContent = '';
 
-   // Change the page's header message as we are no longer in the welcome page
-   let headerMsg = "<h1 id = 'header-msg'>JavaScript Coding Assessment</h1>";
-   let element = document.getElementById( "Dquiz" );
-   element.innerHTML = headerMsg;
-   
-   // Display time remaining
-   //displayTime();
+    } else {
 
-   if( newQuiz.isEnded() ) {
-      displayScores();
-   }
-   else {
-      // Display the Dquiz question
-      let element = document.getElementById( "questions" );
-      element.innerHTML = newQuiz.getQuestionIndex().questionText;
+    // FUNCTION TO CALL WHEN THE GAME HAS ENDED 
+    // EITHER RAN OUT OF TIME OR ALL QUESTIONS ANSWERED
 
-       // Display answer choices
-      let choices = newQuiz.getQuestionIndex().answerChoices;
-      for( let i = 0; i < choices.length; i++ ) {
-         let element = document.getElementById( "answer-choice" + i );
-         element.innerHTML = choices[ i ];
-         userChoice( "button" + i, choices[ i ] );
-      }
+    // UNHIDE THE FORM, TAKE IT FROM DISPLAY NONE, TO DISPLAY BLOCK
+    questionSpanEl.textContent = "";
+    questionContainerEl.textContent = '';
 
-      displayProgress();
-   }
-};
+    questionContainerEl.textContent = "Thank you for playing the Game, your score was " + score;
+    
+    // MAKE THE END AREA TEXT APPEAR 
+    endGameArea.style.display = "block";
+    }
 
-let userChoice = function( id, answerChoice ) {
-   let button = document.getElementById( id );
-   button.onclick = function() {
-      newQuiz.userChoice( answerChoice );
-      displayQuiz();
-   }
-};
+}
 
-let displayProgress = function() {
-   let currentQuestionNumber = newQuiz.questionIndex + 1;
-   let element = document.getElementById( "theprogress" );
-   console.log ( "function displayProgress element: ");
-   console.log( element );
-   element.innerHTML = "Question " + currentQuestionNumber + " of " + newQuiz.questions.length;
-};
 
-let displayScores = function() {
-   let gameOverHTML = "<h1>Your Performance</h1>";
-   gameOverHTML += "<br><h2 id = 'correct-answer'>You answered " + newQuiz.correctAnswer + " out of " +
-                     newQuiz.questions.length + " questions correctly.</h2><br>" +
-                     "<h2 id = 'correct-answer'>Your score is " + timeRemaining + "</h2>";
-   let element = document.getElementById( "Dquiz" );
-   element.innerHTML = gameOverHTML;
-};
+function printQuestion(questionObj) {
 
-// Questions will begin here!!
-let quizQuestions = [
-   new eachQuestion( "Commonly used data types DO NOT include:",
-                     [ "strings", "booleans", "alerts", "numbers" ],
-                     "alerts" ),
-   new eachQuestion( "The condition in an if/else statement is enclosed with _____.",
-                     [ "quotes", "curly brackets", "parenthesis", "square brackets" ],
-                     "parenthesis" ),
-   new eachQuestion( "Arrays in JavaScript can be use to store _____.",
-                     [ "numbers and string", "other arrays", "booleans", "all of the above" ],
-                     "all of the above" ),
-   new eachQuestion( "String values must be enclosed within _____ when being assigned to variables",
-                     [ "commas", "curly brackets", "quotes", "parenthesis" ],
-                     "quotes" ),
-   new eachQuestion( "A very useful tool used during evelopment and debugging for printing content to the debugger is",
-                     [ "JavaScript", "terminal/bash", "for loops", "console log" ],
-                     "console log" ),
-   new eachQuestion( "JavaScript is:",
-                     [ "client-side scripting language", "server-side scripting language", "neither", "both" ],
-                     "both" ),
-   new eachQuestion( "Which is the symbol used for comments in JavaScript",
-                     [ "//", "!----!", "**", "none of the above" ],
-                     "//" ),
-   new eachQuestion( "Which of the following is a strict equality?",
-                     [ "==", "=", "===", "all of the above" ],
-                     "===" ),
-   new eachQuestion( "What can you use to convert the string of any base to an integer in JavaScript?",
-                     [ "convertToInt();", "parseInt();", "toInt();", "allToInt();" ],
-                     "parseInt();" ),
-   new eachQuestion( "What does an undefined value in JavaScript mean?",
-                     [ "variable does not exist", "variable has no value", "property does not exist", "all of the above" ],
-                     "all of the above" )
-];
+    // PRINT THE QUESTION
+    questionSpanEl.textContent = '';
+    questionSpanEl.textContent = questionObj.q;
 
-// Quiz constructer Created Here!!!
-let newQuiz = new TheQuiz( quizQuestions );
+    // PRINT THE ANSWER CHOIES, THIS RESETS THEM TO BLANK PRIOR TO DISPLAYING THEM
+    // WHEN APPENDING CHILDREN NEED TO RESET THEM FIRST 
+    questionContainerEl.textContent = '';
 
-let displayWelcome = function() {
-   // Display welcome message
-   let welcomeMsg = "<h1 id = 'welcome'>Welcome to<br>Multiple Choice Quiz!!</h1>";
-   welcomeMsg += "<br><h2 id = 'welcomeH2'>Try your luck at answering these JavaScript/HTML questions and see how many you can get.By the way there is a time limit. Be sure to answer correctly!</h2><br>" + startQuizBtn.outerHTML;
-   let element = document.getElementById( "Dquiz" );
-   element.innerHTML = welcomeMsg;
+    // LOOP THROUGH ALL THE ANSWERS TO DISPLAY TO THE USER
+    for (answer in questionObj) {
+        
+        if (answer !== 'q') {
+           
+            // CREATE A BUTTON FOR EVERY ANSWER 
+            let answerBtn = document.createElement('button');
+            answerBtn.setAttribute('id', 'answer-id');
+            answerBtn.setAttribute('class', 'btn'); 
+            answerBtn.textContent = questionObj[answer];
 
-   document.getElementById( "start-quiz").addEventListener( "click", displayQuiz );
-};
+            // WHEN THE USER SELECTS AN ANSWER, CALL THIS FUNCTION TO VALIDATE IF ANSWER IS CORRECT
+            answerBtn.onclick = function() {
+             
+                    // Answers displayed here!
+                    if (   
+                            answerBtn.textContent === "web page content" || 
+                            answerBtn.textContent === "pizza" || 
+                            answerBtn.textContent === "javascript" || 
+                            answerBtn.textContent === "color" || 
+                            answerBtn.textContent === "true" 
+                    ) {
+                      
+                        // INCREMENT THE SCORE BECAUSE THE ANSWER IS CORRECT
+                        score++;
 
-// Welcone Page displayed here!!
-displayWelcome();
+                        // MOVE TO THE NEXT QUESTION 
+                        currentQuestionindex++;
+
+                        // CHANGE THE TEXT TO SAY CORRECT
+                        answerArea.textContent = "CORRECT, Good Job!";
+
+                        // AFTER 2 SECONDS MOVE ON TO THE NEXT QUESTION AND IF ITS THE LAST QUESTION THEN 
+                        // CALL THE END GAME FUNCTION 
+                        setTimeout(function(){ 
+                            answerArea.textContent = "";
+                            
+                            if(currentQuestionindex === 5){
+                                endGame(score);
+                            } else {
+                                printQuestion(questions[currentQuestionindex]);
+                            }
+
+                        }, 2000);
+
+                    } else {
+
+                        currentQuestionindex++;
+                        answerArea.textContent = "WRONG, Sorry bud!";
+
+                        // CALL THE COUNTDOWN CLOCK WITH SPECIAL NUMBER
+                        // INSTEAD OF -1 PASS IT A CUSTOM NUMBER -5 
+                        countDown(10);
+                        setTimeout(function(){ 
+                            answerArea.textContent = "";
+                              
+                            if(currentQuestionindex == 5){
+
+                                endGame(score);
+                            } else {
+                                printQuestion(questions[currentQuestionindex]);
+                            }
+
+                        }, 2000);
+
+                    }
+
+            };
+            questionContainerEl.appendChild(answerBtn);
+            
+        }
+    }
+}
+
+function setHighScores() {
+
+    // TO DO 
+
+    // INSERT THE INITIALS AND SCORE TO LOCAL STORAGE
+    console.log("here",document.querySelector("#string-initials").elements[0].value)
+    localStorage.setItem('score', score)
+    localStorage.setItem('initials', document.querySelector("#string-initials").elements[0].value)
+}
+
+function getHighScores()
+{
+    var initials = localStorage.getItem('initials');
+    score = localStorage.getItem('score'); 
+
+    if (initials && score) {
+       window.location = "score.html"; 
+    }
+}
+
+
+    startEl.addEventListener('click', function() {
+        let countDownTimerID = setInterval(function() {
+            
+            if (timeLeft > 0) {
+                countDown();
+            } else {
+                //GAME TIMER HAS ENDED, CALL THE SAME FUNCTION BUT WITH NEW ARGUMENT
+                //THIRD ARGUMENT IS END GAME JUST TO DISTINGUISH BETWEEN NORMAL ENDING AND 
+                //TIMEOUT TYPE ENDING
+                endGame(score, '', 'end game');
+                clearInterval(countDownTimerID);
+            }
+        }, 1000);
+    
+        printQuestion(questions[currentQuestionindex]);
+    });
