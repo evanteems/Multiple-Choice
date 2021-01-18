@@ -8,27 +8,55 @@
 </head>
 
 <body>
-    <div id="container">
-        <div id="start">Start Quiz!</div>
-        <div id="Quiz" style="display: none">
-            <div id="question"></div>
-            <div id="img"></div>
-            <div id="choices">
-                <!--Choices Start Here!-->
-                <div class="choice" id="A" onclick="checkAnswer('A')"></div>
-                <div class="choice" id="B" onclick="checkAnswer('B')"></div>
-                <div class="choice" id="C" onclick="checkAnswer('C')"></div>
+    <main>
+        <div class= "the-grid">
+            <div id="Dquiz">
+                <h1></h1>
+
+                <div class="wrapped" id="wrapped">
+                    <div class="container">
+                        <div id="theprogress"></div>
+                        <div id="time-remaining"></div>
+                    </div>
+                </div>
+
+                <hr style="margin-bottom: 25px">
+                <!--Start Buttom made here-->
+                <div>
+                    <button id="start-button">START QUIZ</button>
+                </div>
+
+                <p id="questions"></p>
+
+                <div class="answers">
+                    <button id="buttonZ">
+                        <span id="choiceA"></span>
+                    </button>
+
+                    <button id="buttonY">
+                        <span id="choiceB"></span>
+                    </button>
+
+                    <button id="buttonX">
+                        <span id="choiceC"></span>
+                    </button>
+
+                    <button id="buttonW">
+                        <span id="choiceD"></span>
+                    </button>
+                </div>
+
+                <hr style="margin-bottom: 45px">
+
+                <footer>
+                    <p id="status-answers"></p>
+                </footer>
+
+                <hr style="margin-top: 45px">
             </div>
-            <!--Timer Starts here!-->
-            <div id="timer">
-                <div id="counter"></div>
-                <div id="atimeGuage"></div>
-                <div id="timeGuage"></div>
-            </div>
-            <div id="theprogress"></div>
         </div>
-        <div id="scoreContainers" style="display: none"></div>
-    </div>
+    </main>
+    
     <script src="quiz.js"></script>    
 </body>
 </html>

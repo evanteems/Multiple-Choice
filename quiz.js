@@ -1,197 +1,163 @@
 // all id elements go here!!
+let timeRemaining = 250;
+let startQuizBtn = document.getElementById( "start-button" );
 
-const start = document.getElementById("start");
+// Function Contructer starts here!!
+let TheQuiz = function( questionsObj ) {
+   this.correctAnswer = 0;
+   this.questions = questionsObj;
+   this.questionIndex = 0;
+};
 
-const quiz = document.getElementById("Quiz");
+TheQuiz.prototype.getQuestionIndex = function() {
+   return this.questions[ this.questionIndex ];
+};
 
-const question = document.getElementById("question");
+// When the user chooses an answer
+TheQuiz.prototype.userChoice = function( userAnswer ) {
+   let isCorrect = document.getElementById( "status-answers" );
 
-const Img = document.getElementById("img");
+   // When the user chooses an answer Correctly!!
+   if ( this.getQuestionIndex().isCorrectAnswer( userAnswer )) {
+      this.correctAnswer++;
+      isCorrect.innerHTML = "This answer is Correct!";
+   }
+   // When the user chooses an answer incorrectly!!
+   else {
+      isCorrect.innerHTML = "This answer is wrong!!";
+      timeRemaining = timeRemaining - 10;
+      console.log ( "timeRemaining: " + timeRemaining );
+      displayTime();
+   };
 
-const choiceA = document.getElementById("A");
+   this.questionIndex++;
+};
 
-const choiceB = document.getElementById("B");
+TheQuiz.prototype.isEnded = function() {
+   return this.questionIndex === this.questions.length;
+};
 
-const choiceC = document.getElementById("C");
+let eachQuestion = function( question, answerChoices, correctAnswer ) {
+   this.questionText = question;
+   this.answerChoices = answerChoices;
+   this.correctAnswer = correctAnswer;
+};
 
-const counter = document.getElementById("counter");
+eachQuestion.prototype.isCorrectAnswer = function( userAnswer ) {
+   return this.correctAnswer === userAnswer;
+};
 
-const timeGuage = document.getElementById("timeGuage");
+// Display the current remaining time
+let displayTime = function() {
+   let timeElement = document.getElementById( "time-left" );
+   console.log( "displayTime function timeElement: " );
+   console.log( timeElement );
+   timeElement.innerHTML = "Time Remaining: " + timeRemaining + " seconds.";
+};
 
-const progress = document.getElementById("theprogress");
+let displayQuiz = function() {
+   // Hide the "Start Quiz" button from the welcome page
+   startQuizBtn.style.visibility = "hidden";
 
-const scoreDiv = document.getElementById("score");
+   // Change the page's header message as we are no longer in the welcome page
+   let headerMsg = "<h1 id = 'header-msg'>JavaScript Coding Assessment</h1>";
+   let element = document.getElementById( "Dquiz" );
+   element.innerHTML = headerMsg;
+   
+   // Display time remaining
+   //displayTime();
 
-let answerisWrong = 0
+   if( newQuiz.isEnded() ) {
+      displayScores();
+   }
+   else {
+      // Display the Dquiz question
+      let element = document.getElementById( "questions" );
+      element.innerHTML = newQuiz.getQuestionIndex().questionText;
 
-// questions begin here!!
-let questions = [
+       // Display answer choices
+      let choices = newQuiz.getQuestionIndex().answerChoices;
+      for( let i = 0; i < choices.length; i++ ) {
+         let element = document.getElementById( "answer-choice" + i );
+         element.innerHTML = choices[ i ];
+         userChoice( "button" + i, choices[ i ] );
+      }
 
-    {
-        question : "How many Tags are in a html?",
+      displayProgress();
+   }
+};
 
-        choiceA : "Correct!",
+let userChoice = function( id, answerChoice ) {
+   let button = document.getElementById( id );
+   button.onclick = function() {
+      newQuiz.userChoice( answerChoice );
+      displayQuiz();
+   }
+};
 
-        choiceB : "Wrong!",
+let displayProgress = function() {
+   let currentQuestionNumber = newQuiz.questionIndex + 1;
+   let element = document.getElementById( "theprogress" );
+   console.log ( "function displayProgress element: ");
+   console.log( element );
+   element.innerHTML = "Question " + currentQuestionNumber + " of " + newQuiz.questions.length;
+};
 
-        choiceC : "Wrong!",
+let displayScores = function() {
+   let gameOverHTML = "<h1>Your Performance</h1>";
+   gameOverHTML += "<br><h2 id = 'correct-answer'>You answered " + newQuiz.correctAnswer + " out of " +
+                     newQuiz.questions.length + " questions correctly.</h2><br>" +
+                     "<h2 id = 'correct-answer'>Your score is " + timeRemaining + "</h2>";
+   let element = document.getElementById( "Dquiz" );
+   element.innerHTML = gameOverHTML;
+};
 
-        correct : "A"
-
-    },{
-        question : "What does <br /> stand for?",
-
-        choiceA : "Wrong!",
-
-        choiceB : "Wrong!",
-
-        choiceC : "Correct!",
-
-        correct : "C"
-
-    },{
-        question : "</ head> Is this an opening tag or a closed tag?",
-
-        choiceA : "Wrong!",
-
-        choiceB : "Correct!",
-
-        choiceC : "Wrong!",
-
-        correct : "B"
-
-    },{
-        question : "What does HTML stand for?",
-
-        choiceA : "Wrong!",
-
-        choiceB : "Correct!",
-
-        choiceC : "Wrong!",
-
-        correct : "B"
-
-    },{
-        question : "Which of the following is an example of an empty element?",
-
-        choiceA : "Correct!",
-
-        choiceB : "Wrong!",
-
-        ChoiceC : "Wrong!",
-
-        correct : "A"
-
-    },{
-        question : "What does JS stand for?",
-
-        choiceA : "Wrong!",
-
-        choiceB : "Wrong!",
-
-        choiceC : "Correct!",
-
-        correct : "C"
-    }
+// Questions will begin here!!
+let quizQuestions = [
+   new eachQuestion( "Commonly used data types DO NOT include:",
+                     [ "strings", "booleans", "alerts", "numbers" ],
+                     "alerts" ),
+   new eachQuestion( "The condition in an if/else statement is enclosed with _____.",
+                     [ "quotes", "curly brackets", "parenthesis", "square brackets" ],
+                     "parenthesis" ),
+   new eachQuestion( "Arrays in JavaScript can be use to store _____.",
+                     [ "numbers and string", "other arrays", "booleans", "all of the above" ],
+                     "all of the above" ),
+   new eachQuestion( "String values must be enclosed within _____ when being assigned to variables",
+                     [ "commas", "curly brackets", "quotes", "parenthesis" ],
+                     "quotes" ),
+   new eachQuestion( "A very useful tool used during evelopment and debugging for printing content to the debugger is",
+                     [ "JavaScript", "terminal/bash", "for loops", "console log" ],
+                     "console log" ),
+   new eachQuestion( "JavaScript is:",
+                     [ "client-side scripting language", "server-side scripting language", "neither", "both" ],
+                     "both" ),
+   new eachQuestion( "Which is the symbol used for comments in JavaScript",
+                     [ "//", "!----!", "**", "none of the above" ],
+                     "//" ),
+   new eachQuestion( "Which of the following is a strict equality?",
+                     [ "==", "=", "===", "all of the above" ],
+                     "===" ),
+   new eachQuestion( "What can you use to convert the string of any base to an integer in JavaScript?",
+                     [ "convertToInt();", "parseInt();", "toInt();", "allToInt();" ],
+                     "parseInt();" ),
+   new eachQuestion( "What does an undefined value in JavaScript mean?",
+                     [ "variable does not exist", "variable has no value", "property does not exist", "all of the above" ],
+                     "all of the above" )
 ];
 
-const lastQuestion = questions.length - 1;
+// Quiz constructer Created Here!!!
+let newQuiz = new TheQuiz( quizQuestions );
 
-let runningQuestion = 0;
+let displayWelcome = function() {
+   // Display welcome message
+   let welcomeMsg = "<h1 id = 'welcome'>Welcome to<br>Multiple Choice Quiz!!</h1>";
+   welcomeMsg += "<br><h2 id = 'welcomeH2'>Try your luck at answering these JavaScript/HTML questions and see how many you can get.By the way there is a time limit. Be sure to answer correctly!</h2><br>" + startQuizBtn.outerHTML;
+   let element = document.getElementById( "Dquiz" );
+   element.innerHTML = welcomeMsg;
 
-let count = 0;
-
-const questionTime = 10;
-const guageWidth = 150;
-const guageUnit = guageWidth / questionTime;
-let TIMER;
-let score = 0
-
-// Rendering a Question
-
-function renderQuestion() {
-    let q = questions[runningQuestion];
-
-    question.innerHTML = "<p>"+ q.question +"<p>";
-
-    choiceA.innerHTML = q.choiceA;
-
-    choiceB.innerHTML = q.choiceB;
-
-    choiceC.innerHTML = q.choiceC;
+   document.getElementById( "start-quiz").addEventListener( "click", displayQuiz );
 };
 
-start.addEventListener("click",startQuiz);
-// Starting the Quiz!
-function startQuiz() {
-    start.style.display = "none";
-    renderQuestion();
-    quiz.style.display = "block";
-    renderProgress();
-    renderCounter();
-    TIMER = setInterval(renderCounter,1000);
-};
-
-// Progress
-
-function renderProgress() {
-    for(let qIndex = 0; qIndex <= lastQuestion; qIndex++) {
-        theprogress.innerHTML += "div class='prog' id="+ qIndex +"></div>";
-
-    }
-};
-
-function renderCounter() {
-    if(count <= questionTime) {
-        counter.innerHTML = count;
-        timeGuage.style.width = count * guageUnit + "px";
-        count++
-    }else{
-        count = 0;
-        anserisWrong();
-        if(runningQuestion < lastQuestion){
-            runningQuestion++;
-            renderQuestion();
-        }else{
-            clearInterval(TIMER);
-            scoreRender();
-        };
-    };
-};
-
-// Check on Answers!!
-function checkAnswer(answer) {
-    if( answer == questions[runningQuestion].correct) {
-        score++;
-        answeriscorrect();
-    }else{
-        anserisWrong();
-    };
-    count = 0;
-    if(runningQuestion < lastQuestion) {
-        runningQuestion++;
-        renderQuestion();
-    }else{
-        clearInterval(TIMER);
-        scoreRender();
-    };
-};
-
-// When the answer is correct!
-function answeriscorrect() {
-    document.getElementById(runningQuestion);
-};
-
-// When the Answer is Incorrect!
-function answerisIncorrect() {
-    document.getElementById(runningQuestion);
-};
-
-// Rendering the Score
-function scoreRender() {
-    scoreDiv.style.display = "block";
-
-    const scorePerCent = Math.round(100 * score/questions.length);
-
-    scoreDiv.innerHTML += "<p>"+ scorePerCent +"%</p>";
-};
+// Welcone Page displayed here!!
+displayWelcome();
