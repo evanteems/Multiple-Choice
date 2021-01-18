@@ -15,22 +15,16 @@ let currentQuestionindex = 0;
 
 //Questions will be made here!!!
 let questions = [
-    { q: "HTML (Hypertext Markup Language)  is the code that is used to structure?", a: "web page content", b: "css", c: "javascript", d: "terminal"},
-    { q: "Which one is not a CSS property?", a: "color", b: "font-style", c: "text-align", d: "pizza" },
-    { q: "Which language makes the web page interactive?", a: "html", b: "css", c: "javascript", d: "google"  },
-    { q: "Which one is not a data type?", a: "inter", b: "string", c:"boolean", d: "color" },
-    { q: "Does coding rock?", a: "true", b: "false" }
+    { q: "What does HTML stand for?", a: "Ham Tomato Mayo and Lettuce", b: "HyperText Markup Language", c: "Hyperberic Teritary Logrithm", d: "Hypertrophic Management Language"},
+    { q: "Which one is not a CSS property?", a: "color", b: "font-style", c: "text-align", d: "bread" },
+    { q: "<br /> What type of tag is this", a: "Break Tag", b: "Opening Tag", c: "Main Tag", d: "Header Tag"  },
+    { q: "Which of the following is an example of an empty element?", a: "<img/>", b: "</img>", c:"<img><img>", d: "<img></img>" },
+    { q: "<body> Is this an opening or closing tag?", a: "Opening", b: "Closing" }
     
 ]
 
 // run timer function
 function countDown(amount) {
-    // check if time left is greater that 0
-    // if it is, decrement timeLeft
-    // and update countDownEl with new time
-
-
-    //TAKE THE ARGUMENT PASSED IN AND DECREMENT BY THAT MUCH
     if ( amount > 1 ) {
         timeLeft =  timeLeft - amount;
     } else {
@@ -44,23 +38,17 @@ function endGame(score, initials = "", status) {
 
     if(status === "end game") {
 
-        questionContainerEl.textContent = "Your time is up, but at least you were able to score " + score; 
+        questionContainerEl.textContent = "Your time is up, hope you had fun! Your score is" + score; 
         endGameArea.style.display = "block";
         questionSpanEl.textContent = "";
         questionContainerEl.textContent = '';
 
     } else {
-
-    // FUNCTION TO CALL WHEN THE GAME HAS ENDED 
-    // EITHER RAN OUT OF TIME OR ALL QUESTIONS ANSWERED
-
-    // UNHIDE THE FORM, TAKE IT FROM DISPLAY NONE, TO DISPLAY BLOCK
     questionSpanEl.textContent = "";
     questionContainerEl.textContent = '';
 
-    questionContainerEl.textContent = "Thank you for playing the Game, your score was " + score;
+    questionContainerEl.textContent = "Thank you for taking this Quiz, your score was " + score;
     
-    // MAKE THE END AREA TEXT APPEAR 
     endGameArea.style.display = "block";
     }
 
@@ -69,45 +57,43 @@ function endGame(score, initials = "", status) {
 
 function printQuestion(questionObj) {
 
-    // PRINT THE QUESTION
+    // Question is printed here!!
     questionSpanEl.textContent = '';
     questionSpanEl.textContent = questionObj.q;
 
-    // PRINT THE ANSWER CHOIES, THIS RESETS THEM TO BLANK PRIOR TO DISPLAYING THEM
-    // WHEN APPENDING CHILDREN NEED TO RESET THEM FIRST 
     questionContainerEl.textContent = '';
 
-    // LOOP THROUGH ALL THE ANSWERS TO DISPLAY TO THE USER
+    // Loop for the answer for the user!
     for (answer in questionObj) {
         
         if (answer !== 'q') {
            
-            // CREATE A BUTTON FOR EVERY ANSWER 
+            // Button created for the answers
             let answerBtn = document.createElement('button');
             answerBtn.setAttribute('id', 'answer-id');
             answerBtn.setAttribute('class', 'btn'); 
             answerBtn.textContent = questionObj[answer];
 
-            // WHEN THE USER SELECTS AN ANSWER, CALL THIS FUNCTION TO VALIDATE IF ANSWER IS CORRECT
+            // when answer is selected the function starts here!!
             answerBtn.onclick = function() {
              
                     // Answers displayed here!
                     if (   
-                            answerBtn.textContent === "web page content" || 
-                            answerBtn.textContent === "pizza" || 
-                            answerBtn.textContent === "javascript" || 
-                            answerBtn.textContent === "color" || 
-                            answerBtn.textContent === "true" 
+                            answerBtn.textContent === "HyperText Markup Language" || 
+                            answerBtn.textContent === "bread" || 
+                            answerBtn.textContent === "Break Tag" || 
+                            answerBtn.textContent === "<img></img>" || 
+                            answerBtn.textContent === "Opening" 
                     ) {
                       
-                        // INCREMENT THE SCORE BECAUSE THE ANSWER IS CORRECT
+                        // Score increased because the user answereed correectly!!
                         score++;
 
-                        // MOVE TO THE NEXT QUESTION 
+                        // Next question is moved here!!
                         currentQuestionindex++;
 
                         // CHANGE THE TEXT TO SAY CORRECT
-                        answerArea.textContent = "CORRECT, Good Job!";
+                        answerArea.textContent = "Congrats!, You got it right!";
 
                         // AFTER 2 SECONDS MOVE ON TO THE NEXT QUESTION AND IF ITS THE LAST QUESTION THEN 
                         // CALL THE END GAME FUNCTION 
@@ -125,7 +111,7 @@ function printQuestion(questionObj) {
                     } else {
 
                         currentQuestionindex++;
-                        answerArea.textContent = "WRONG, Sorry bud!";
+                        answerArea.textContent = "Sorry, This answer is wrong!";
 
                         // CALL THE COUNTDOWN CLOCK WITH SPECIAL NUMBER
                         // INSTEAD OF -1 PASS IT A CUSTOM NUMBER -5 
@@ -178,9 +164,7 @@ function getHighScores()
             if (timeLeft > 0) {
                 countDown();
             } else {
-                //GAME TIMER HAS ENDED, CALL THE SAME FUNCTION BUT WITH NEW ARGUMENT
-                //THIRD ARGUMENT IS END GAME JUST TO DISTINGUISH BETWEEN NORMAL ENDING AND 
-                //TIMEOUT TYPE ENDING
+                //Timer has ended the game!
                 endGame(score, '', 'end game');
                 clearInterval(countDownTimerID);
             }

@@ -1,0 +1,36 @@
+.container-box {
+    border: 2px solid orange;
+    width: 700px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+h1 {
+    color:black;
+    text-align: center;
+ 
+}
+
+.box {
+    border: 1px solid orange;
+    height: 60px;
+    width: 90px;
+    margin-left:300px;
+    display: flex;
+    justify-content: center;
+}
+
+p {
+    color:black;
+    font-size: x-large;
+    text-align: center;
+    font-weight: 900;
+}
+
+#initial-content {
+   
+}
+
+#score-content {
+    
+}
